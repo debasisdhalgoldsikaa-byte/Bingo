@@ -1,0 +1,39 @@
+<section class="log-in">
+    <div class="container">
+        <div class="login-box">
+            <div class="row">
+                <div class="col-md-6">
+                    <img src="../../../assets/log-in.png" alt="">
+                </div>
+                <div class="col-md-6">
+
+                    <h4 class="meow-script-regular mb-4">Log-In</h4>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-10">
+                        <form #loginForm="ngForm" (ngSubmit)="login()">
+                            <!-- Username -->
+                            <div>
+                                <label class="finger-paint-regular mb-2" for="username">Username</label><br>
+                                <input type="text" id="username" name="username" [(ngModel)]="username" required
+                                    #usernameField="ngModel" />
+                                <p *ngIf="usernameField.invalid && usernameField.touched" class="text-danger"> Username is required </p>
+                            </div>
+                            <!-- Password -->
+                            <div>
+                                <label class="finger-paint-regular mt-3 mb-2" for="password">Password</label><br>  
+                                <input type="password" id="password" name="password" [(ngModel)]="password" required
+                                    #passwordField="ngModel" />
+                                <p *ngIf="passwordField.invalid && passwordField.touched" class="text-danger"> Password is required </p>
+                            </div>
+                            <!-- Submit -->
+                            <div class="submit-btn">
+                                <button class="finger-paint-regular" type="submit" [disabled]="loginForm.invalid"> Login </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
