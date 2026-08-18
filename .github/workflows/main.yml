@@ -29,11 +29,7 @@ jobs:
 
       - name: Build Angular
         run: npm run build -- --configuration production --base-href /Bingo/
-
-      # Important for Angular routing on GitHub Pages
-      - name: Create 404 fallback
-        run: cp dist/demoweb/browser/index.html dist/demoweb/browser/404.html
-
+        
       - name: Upload Angular build
         uses: actions/upload-pages-artifact@v4
         with:
