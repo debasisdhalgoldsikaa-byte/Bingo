@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
 permissions:
   contents: read
   pages: write
@@ -29,7 +33,10 @@ jobs:
 
       - name: Build Angular
         run: npm run build -- --configuration production --base-href /Bingo/
-        
+
+      - name: Create 404 fallback
+        run: cp dist/demoweb/browser/index.html dist/demoweb/browser/404.html
+
       - name: Upload Angular build
         uses: actions/upload-pages-artifact@v4
         with:
