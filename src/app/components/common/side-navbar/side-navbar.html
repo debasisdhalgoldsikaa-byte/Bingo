@@ -1,0 +1,116 @@
+<header class="navbar">
+
+  <!-- Logo -->
+  <div class="logo" (click)="openImage()">
+    <span class="logo-icon">✦</span>
+    <span >MyApp</span>
+  </div>
+
+  <!-- Desktop Navigation -->
+  <nav class="desktop-menu">
+    <a routerLink="/home" routerLinkActive="active">FriendShip</a>
+    <a routerLink="/ticTacToe" routerLinkActive="active">tic-tac-toe</a>
+    <a routerLink="/services" routerLinkActive="active">Services</a>
+    <a routerLink="/contact" routerLinkActive="active">Contact</a>
+  </nav>
+
+  <!-- Right Side -->
+  <div class="nav-right">
+
+    <button class="login-btn"  routerLink="">
+      Login
+    </button>
+
+    <!-- Hamburger -->
+    <button class="menu-btn" (click)="toggleMenu()">
+      <span [class.open]="isMenuOpen"></span>
+      <span [class.open]="isMenuOpen"></span>
+      <span [class.open]="isMenuOpen"></span>
+    </button>
+
+  </div>
+</header>
+
+
+<!-- Mobile Top-to-Bottom Menu -->
+<div class="mobile-menu" [class.show]="isMenuOpen">
+
+  <div class="mobile-menu-header">
+    <div class="mobile-logo">
+      <span class="logo-icon">✦</span>
+      MyApp
+    </div>
+
+    <button class="close-btn" (click)="toggleMenu()">
+      ✕
+    </button>
+  </div>
+
+  <div class="mobile-links">
+
+    <a routerLink="/home"
+       routerLinkActive="active"
+       (click)="toggleMenu()">
+      <span>⌂</span>
+      Home
+    </a>
+
+    <a routerLink="/about"
+       routerLinkActive="active"
+       (click)="toggleMenu()">
+      <span>◉</span>
+      About
+    </a>
+
+    <a routerLink="/services"
+       routerLinkActive="active"
+       (click)="toggleMenu()">
+      <span>✦</span>
+      Services
+    </a>
+
+    <a routerLink="/contact"
+       routerLinkActive="active"
+       (click)="toggleMenu()">
+      <span>✉</span>
+      Contact
+    </a>
+
+  </div>
+
+  <button class="mobile-login">
+    Login
+  </button>
+
+</div>
+
+<!-- Background overlay -->
+<div
+  class="overlay"
+  [class.show]="isMenuOpen"
+  (click)="toggleMenu()">
+</div>
+
+
+
+
+<!-- Full Screen Image Modal -->
+
+<div
+  class="image-modal"
+  *ngIf="isImageOpen"
+  (click)="closeImage()">
+
+  <button
+    class="close-btn"
+    (click)="closeImage(); $event.stopPropagation()">
+    ✕
+  </button>
+  <img
+    [src]="selectedImage"
+    alt="Random Image"
+    class="fullscreen-image"
+    (click)="$event.stopPropagation()"
+  />
+
+</div>

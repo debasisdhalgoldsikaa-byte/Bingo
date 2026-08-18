@@ -1,0 +1,286 @@
+.game-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  background:
+    linear-gradient(
+      rgba(55, 25, 8, 0.2),
+      rgba(30, 12, 3, 0.35)
+    ),
+    repeating-linear-gradient(
+      90deg,
+      #4a2612 0px,
+      #633718 8px,
+      #3c1d0c 16px,
+      #6a3a19 25px,
+      #42200e 35px
+    );
+
+  color: white;
+  overflow: hidden;
+  padding-bottom: 30px;
+}
+
+/* Top bar */
+
+.top-bar {
+  width: 92%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 10px;
+}
+
+.icon-btn,
+.sound-btn {
+  background: transparent;
+  border: none;
+  color: #f4b85c;
+  font-size: 30px;
+  cursor: pointer;
+  text-shadow: 2px 2px 3px #000;
+}
+
+/* Title */
+
+.game-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  margin-top: 10px;
+  margin-bottom: 15px;
+
+  font-family: Georgia, serif;
+  font-size: 42px;
+  font-weight: bold;
+
+  text-shadow:
+    3px 3px 2px #251006,
+    -1px -1px 0 #e7b46b;
+}
+
+.x-title {
+  color: #c62828;
+  font-size: 58px;
+}
+
+/* Turn */
+
+.turn-text {
+  font-family: Georgia, serif;
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: #ffe0a1;
+  text-shadow: 2px 2px 2px #000;
+}
+
+/* Board */
+
+.board {
+  width: min(88vw, 390px);
+  aspect-ratio: 1 / 1;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+
+  padding: 10px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #704018,
+      #3d1d0b
+    );
+
+  border: 5px solid #261208;
+
+  box-shadow:
+    0 8px 15px rgba(0, 0, 0, 0.7),
+    inset 0 0 10px #120702;
+}
+
+/* Cells */
+
+.cell {
+  position: relative;
+
+  border: 3px solid rgba(40, 18, 7, 0.85);
+
+  background:
+    linear-gradient(
+      135deg,
+      #9b5a27,
+      #704019 45%,
+      #4a250f
+    );
+
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition:
+    transform 0.15s,
+    filter 0.15s;
+}
+
+.cell:hover:not(:disabled) {
+  filter: brightness(1.2);
+  transform: scale(0.97);
+}
+
+.cell:disabled {
+  cursor: default;
+}
+
+/* X */
+
+.x-symbol {
+  color: #d51f2b;
+
+  font-family: Georgia, serif;
+
+  font-size: clamp(60px, 15vw, 105px);
+
+  font-weight: 900;
+
+  line-height: 1;
+
+  text-shadow:
+    3px 3px 0 #641015,
+    5px 5px 5px rgba(0, 0, 0, 0.8);
+
+  -webkit-text-stroke: 2px #ef5555;
+}
+
+/* O */
+
+.o-symbol {
+  color: #080808;
+
+  font-family: Georgia, serif;
+
+  font-size: clamp(60px, 15vw, 105px);
+
+  font-weight: 900;
+
+  line-height: 1;
+
+  text-shadow:
+    2px 2px 0 #777,
+    5px 5px 6px rgba(0, 0, 0, 0.8);
+
+  -webkit-text-stroke: 3px #171717;
+}
+
+/* Result */
+
+.result {
+  margin-top: 18px;
+
+  padding: 10px 25px;
+
+  border-radius: 12px;
+
+  background:
+    linear-gradient(
+      #b8782b,
+      #713a12
+    );
+
+  border: 2px solid #d99a48;
+
+  font-family: Georgia, serif;
+
+  font-size: 22px;
+  font-weight: bold;
+
+  box-shadow:
+    0 5px 10px rgba(0, 0, 0, 0.6);
+
+  text-shadow: 2px 2px 2px #000;
+}
+
+/* Buttons */
+
+.buttons {
+  width: min(88vw, 390px);
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+
+  margin-top: 25px;
+}
+
+.wood-button {
+  height: 50px;
+
+  border-radius: 14px;
+
+  border: 3px solid #4a250c;
+
+  background:
+    linear-gradient(
+      #d6923e,
+      #9c591d 45%,
+      #71380f
+    );
+
+  color: white;
+
+  font-family: Georgia, serif;
+
+  font-size: 19px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  box-shadow:
+    inset 0 2px 2px rgba(255, 220, 150, 0.7),
+    0 5px 8px rgba(0, 0, 0, 0.7);
+
+  text-shadow: 2px 2px 2px #4a2108;
+
+  transition: 0.15s;
+}
+
+.wood-button:hover {
+  transform: translateY(-2px);
+
+  filter: brightness(1.15);
+}
+
+.wood-button:active {
+  transform: translateY(2px);
+}
+
+/* Mobile */
+
+@media (max-width: 500px) {
+
+  .game-title {
+    font-size: 34px;
+  }
+
+  .x-title {
+    font-size: 48px;
+  }
+
+  .board {
+    width: 92vw;
+  }
+
+  .wood-button {
+    height: 48px;
+    font-size: 17px;
+  }
+}

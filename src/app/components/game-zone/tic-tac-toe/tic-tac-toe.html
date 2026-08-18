@@ -1,0 +1,63 @@
+<div class="game-container">
+
+  <!-- Top icons -->
+  <div class="top-bar">
+    <button class="icon-btn">ⓘ</button>
+
+    <button class="sound-btn" (click)="toggleSound()">
+      {{ soundOn ? '🔊' : '🔇' }}
+    </button>
+  </div>
+
+  <!-- Title -->
+  <div class="game-title">
+    <span>TIC</span>
+    <span class="x-title">X</span>
+    <span>TOE</span>
+  </div>
+
+  <!-- Current Player -->
+  <div class="turn-text" *ngIf="!winner && !isDraw">
+    Player {{ currentPlayer }}'s Turn
+  </div>
+
+  <!-- Board -->
+  <div class="board">
+
+    <button
+      class="cell"
+      *ngFor="let cell of board; let i = index"
+      [class.x]="cell === 'X'"
+      [class.o]="cell === 'O'"
+      [disabled]="cell !== '' || winner !== ''"
+      (click)="makeMove(i)"
+    >
+      <span *ngIf="cell === 'X'" class="x-symbol">X</span>
+      <span *ngIf="cell === 'O'" class="o-symbol">O</span>
+    </button>
+
+  </div>
+
+  <!-- Winner -->
+  <div class="result" *ngIf="winner">
+    🎉 Player {{ winner }} Wins!
+  </div>
+
+  <div class="result" *ngIf="isDraw && !winner">
+    🤝 Game Draw!
+  </div>
+
+  <!-- Buttons -->
+  <div class="buttons">
+
+    <button class="wood-button" (click)="restartGame()">
+      🔄 Restart Game
+    </button>
+
+    <button class="wood-button" (click)="newGame()">
+      🏠 New Game
+    </button>
+
+  </div>
+
+</div>

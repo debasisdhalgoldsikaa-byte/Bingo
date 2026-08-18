@@ -1,8 +1,30 @@
 import { Routes } from '@angular/router';
 import { LogInComponent } from './components/log-in/log-in.component';
-import { HomeComponent } from './components/home/home.component';
+import { HomeComponent } from './components/game-zone/home/home.component';
+import { ComponentComunication } from './components/pages/component-comunication/component-comunication';
+import { SideNavbar } from './components/common/side-navbar/side-navbar';
+import { TicTacToe } from './components/game-zone/tic-tac-toe/tic-tac-toe';
+import { MainLayout } from './components/common/main-layout/main-layout';
 
 export const routes: Routes = [
     {path: '', component: LogInComponent},
-    {path:'home', component: HomeComponent}
+
+    {
+        path:'',
+        component:MainLayout,
+        children:[
+
+            {path:'home', component: HomeComponent},
+            {
+                path:'c-comunication', component: ComponentComunication
+            },
+            {
+                path:'ticTacToe', component:TicTacToe
+            }
+        ]
+    },
+    {
+        path:'**',
+        redirectTo:''
+    }
 ];

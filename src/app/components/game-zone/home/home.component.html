@@ -1,0 +1,404 @@
+<div class="game-container">
+
+  <h1>Friendship Game</h1>
+
+
+  <!-- SEARCH / CONTROLS -->
+
+  <div class="controls">
+
+    <input
+      type="number"
+      [(ngModel)]="inputNumber"
+      placeholder="Enter number"
+      min="1"
+      max="100"
+      (keyup.enter)="markNumber()"
+    />
+
+    <button
+      class="mark-btn"
+      (click)="markNumber()">
+
+      ✓ Mark
+
+    </button>
+
+    <button
+      class="unmark-btn"
+      (click)="unmarkNumber()">
+
+      ✕ Unmark
+
+    </button>
+
+    <button
+      class="reset-btn"
+      (click)="resetGame()">
+
+      ↻ New Game
+
+    </button>
+
+  </div>
+
+
+  <!-- MAIN LAYOUT -->
+
+  <div class="game-layout">
+
+
+    <!-- ========================= -->
+    <!-- LEFT PLAYER PANEL -->
+    <!-- ========================= -->
+
+    <div class="player-panel">
+<div class="player-icon-wrapper">
+
+  <!-- Current Avatar -->
+  <div
+    class="player-icon"
+    (click)="openAvatarPicker()"
+  >
+    {{ playerAvatar }}
+  </div>
+
+  <!-- Avatar Picker -->
+  <div
+    class="avatar-picker"
+    *ngIf="showAvatarPicker"
+  >
+
+    <div class="avatar-title">
+      Choose Avatar
+    </div>
+
+    <div class="avatar-options">
+
+      <button
+        *ngFor="let emoji of avatarEmojis"
+        type="button"
+        class="avatar-option"
+        (click)="selectAvatar(emoji)"
+      >
+        {{ emoji }}
+      </button>
+
+    </div>
+
+    <!-- Upload Image -->
+    <label
+      for="playerImageInput"
+      class="upload-avatar"
+    >
+      📷 Upload Photo
+    </label>
+
+    <input
+      id="playerImageInput"
+      type="file"
+      accept="image/*"
+      hidden
+      (change)="onPlayerImageSelected($event)"
+    />
+
+  </div>
+
+</div>
+
+
+      <h2>
+        Player
+      </h2>
+
+
+      <!-- NAME INPUT -->
+
+      <div
+        class="name-section"
+        *ngIf="showNameInput">
+
+        <input
+          type="text"
+          [(ngModel)]="playerName"
+          placeholder="Enter your name"
+          maxlength="30"
+          (keyup.enter)="savePlayerName()"
+        />
+
+        <button
+          (click)="savePlayerName()">
+
+          Save
+
+        </button>
+
+      </div>
+
+
+      <!-- SAVED NAME -->
+
+      <div
+        class="saved-name"
+        *ngIf="!showNameInput">
+
+        <div class="player-name">
+          {{ playerName }}
+        </div>
+
+        <button
+          class="change-name"
+          (click)="changePlayerName()">
+
+          Change Name
+
+        </button>
+
+      </div>
+
+
+      <div class="player-divider"></div>
+
+
+      <!-- WINS -->
+
+      <div class="stat-box">
+
+        <span class="stat-icon">
+          🏆
+        </span>
+
+        <div>
+
+          <small>
+            Wins
+          </small>
+
+          <strong>
+            {{ totalWins }}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <!-- LINES -->
+
+      <div class="stat-box">
+
+        <span class="stat-icon">
+          ✏️
+        </span>
+
+        <div>
+
+          <small>
+            Current Lines
+          </small>
+
+          <strong>
+            {{ completedLineCount }} / 10
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <!-- MARKED -->
+
+      <div class="stat-box">
+
+        <span class="stat-icon">
+          ✓
+        </span>
+
+        <div>
+
+          <small>
+            Numbers Marked
+          </small>
+
+          <strong>
+            {{ markedNumbers.size }}
+          </strong>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- GAME BOARD -->
+    <!-- ========================= -->
+
+    <div class="board-section">
+
+   <div class="game-board">
+
+  <!-- 100 Numbers -->
+  <div
+    *ngFor="let number of numbers; let i = index"
+    class="cell"
+    [class.marked]="isMarked(number)"
+    (click)="toggleNumber(number)"
+  >
+
+    <span class="number">
+      {{ number }}
+    </span>
+
+    <!-- X for selected number -->
+    <div
+      class="number-cross"
+      *ngIf="isMarked(number)"
+    >
+      <span class="cross-line cross-left"></span>
+      <span class="cross-line cross-right"></span>
+    </div>
+
+  </div>
+
+
+  <!-- ========================= -->
+  <!-- FULL HORIZONTAL STRIKES -->
+  <!-- ========================= -->
+
+  <div
+    *ngFor="let row of completedRows"
+    class="completed-horizontal-line"
+    [style.top.%]="row * 10 + 5"
+  ></div>
+
+
+  <!-- ========================= -->
+  <!-- FULL VERTICAL STRIKES -->
+  <!-- ========================= -->
+
+  <div
+    *ngFor="let column of completedColumns"
+    class="completed-vertical-line"
+    [style.left.%]="column * 10 + 5"
+  ></div>
+
+
+  <!-- ========================= -->
+  <!-- DIAGONAL 1 -->
+  <!-- ========================= -->
+
+  <div
+    *ngIf="diagonal1Completed"
+    class="completed-diagonal-line diagonal-1"
+  ></div>
+
+
+  <!-- ========================= -->
+  <!-- DIAGONAL 2 -->
+  <!-- ========================= -->
+
+  <div
+    *ngIf="diagonal2Completed"
+    class="completed-diagonal-line diagonal-2"
+  ></div>
+
+</div>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- FRIENDSHIP -->
+    <!-- ========================= -->
+
+      <div class="friendship-panel">
+
+        <div class="friendship-letters">
+
+          <div
+            *ngFor="
+              let letter of friendshipWord.split('');
+              let i = index
+            "
+
+            class="friendship-letter"
+
+            [class.crossed]="
+              isLetterCrossed(i)
+            "
+          >
+
+            {{ letter }}
+
+            <!-- Single cross -->
+
+            <span
+              class="single-cross"
+              *ngIf="
+                isLetterCrossed(i)
+              "
+            >
+              ✕
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="line-count">
+
+          {{ completedLineCount }} / 10
+
+        </div>
+
+      </div>
+
+  </div>
+
+
+  <!-- CONGRATULATION SCREEN -->
+
+  <div
+    class="congratulation-overlay"
+    *ngIf="showCongratulations"
+  >
+
+    <div class="congratulation-box">
+
+      <div class="trophy">
+        🏆
+      </div>
+
+      <h2>
+        Congratulations!
+      </h2>
+
+      <p>
+        Well done,
+        <strong>{{ playerName }}</strong>!
+      </p>
+
+      <div class="friendship-completed">
+        FRIENDSHIP
+      </div>
+
+      <p>
+        You completed all 10 lines!
+      </p>
+
+      <button
+        class="new-game-button"
+        (click)="resetGame()">
+
+        🎮 Play Again
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
