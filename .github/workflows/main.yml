@@ -5,10 +5,6 @@ on:
     branches:
       - main
 
-concurrency:
-  group: pages
-  cancel-in-progress: true
-
 permissions:
   contents: read
   pages: write
@@ -33,10 +29,7 @@ jobs:
 
       - name: Build Angular
         run: npm run build -- --configuration production --base-href /Bingo/
-
-      - name: Create 404 fallback
-        run: cp dist/demoweb/browser/index.html dist/demoweb/browser/404.html
-
+        
       - name: Upload Angular build
         uses: actions/upload-pages-artifact@v4
         with:
@@ -53,4 +46,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v4 what need to update here also modify app.config.ts still not workeing
