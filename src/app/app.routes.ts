@@ -5,6 +5,8 @@ import { ComponentComunication } from './components/pages/component-comunication
 import { SideNavbar } from './components/common/side-navbar/side-navbar';
 import { TicTacToe } from './components/game-zone/tic-tac-toe/tic-tac-toe';
 import { MainLayout } from './components/common/main-layout/main-layout';
+import { ConnectsDots } from './components/game-zone/connects-dots/connects-dots';
+import { Child } from './components/pages/child/child';
 
 export const routes: Routes = [
     {path: '', component: LogInComponent},
@@ -14,12 +16,19 @@ export const routes: Routes = [
         component:MainLayout,
         children:[
 
-            {path:'home', component: HomeComponent},
+            {
+                path:'home', component: HomeComponent
+            },
             {
                 path:'c-comunication', component: ComponentComunication
             },
             {
                 path:'ticTacToe', component:TicTacToe
+            },
+            {
+                path:'dotconnect', component:ConnectsDots
+            },{
+                path:'communication', component:ComponentComunication
             }
         ]
     },

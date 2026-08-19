@@ -1,0 +1,429 @@
+<div class="game-container">
+
+  <!-- =====================================
+       SETUP
+  ====================================== -->
+
+  <div
+    class="setup-screen"
+    *ngIf="!gameStarted"
+  >
+
+    <h1>Dots & Boxes</h1>
+
+    <p>Enter Player Details</p>
+
+
+    <div class="setup-container">
+
+      <!-- PLAYER 1 -->
+
+      <div class="setup-card">
+
+        <h2>Player 1</h2>
+
+        <label>Player Name</label>
+
+        <input
+          type="text"
+          [(ngModel)]="player1Name"
+          placeholder="Enter Player 1 name"
+        />
+
+        <label>Player Color</label>
+
+        <input
+          type="color"
+          [(ngModel)]="player1Color"
+        />
+
+        <div
+          class="color-preview"
+          [style.background]="player1Color"
+        ></div>
+
+      </div>
+
+
+      <!-- PLAYER 2 -->
+
+      <div class="setup-card">
+
+        <h2>Player 2</h2>
+
+        <label>Player Name</label>
+
+        <input
+          type="text"
+          [(ngModel)]="player2Name"
+          placeholder="Enter Player 2 name"
+        />
+
+        <label>Player Color</label>
+
+        <input
+          type="color"
+          [(ngModel)]="player2Color"
+        />
+
+        <div
+          class="color-preview"
+          [style.background]="player2Color"
+        ></div>
+
+      </div>
+
+    </div>
+
+
+    <button
+      class="start-button"
+      (click)="startGame()"
+    >
+      Start Game
+    </button>
+
+  </div>
+
+
+  <!-- =====================================
+       GAME
+  ====================================== -->
+
+  <div *ngIf="gameStarted">
+
+    <h1>Dots & Boxes</h1>
+
+
+    <!-- PLAYERS -->
+
+    <div class="players">
+
+      <!-- PLAYER 1 -->
+
+      <div
+        class="player-card"
+        [class.active]="
+          currentPlayer === 'player1' &&
+          !gameOver
+        "
+        [style.border-color]="player1Color"
+      >
+
+        <div
+          class="player-dot"
+          [style.background]="player1Color"
+        ></div>
+
+        <div>
+          {{ player1Name }}
+        </div>
+
+        <strong>
+          {{ player1Score }}
+        </strong>
+
+      </div>
+
+
+      <!-- TURN -->
+
+      <div
+        class="turn"
+        *ngIf="!gameOver"
+      >
+        {{ getCurrentPlayerName() }}'s Turn
+      </div>
+
+
+      <!-- PLAYER 2 -->
+
+      <div
+        class="player-card"
+        [class.active]="
+          currentPlayer === 'player2' &&
+          !gameOver
+        "
+        [style.border-color]="player2Color"
+      >
+
+        <div
+          class="player-dot"
+          [style.background]="player2Color"
+        ></div>
+
+        <div>
+          {{ player2Name }}
+        </div>
+
+        <strong>
+          {{ player2Score }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <!-- =====================================
+         BOARD
+    ====================================== -->
+
+    <div class="board">
+
+
+      <!-- DOTS + HORIZONTAL LINES -->
+
+      <div
+        class="board-row"
+        *ngFor="
+          let row of [].constructor(rows);
+          let r = index
+        "
+      >
+
+        <ng-container
+          *ngFor="
+            let col of [].constructor(cols);
+            let c = index
+          "
+        >
+
+          <!-- DOT -->
+
+          <div class="dot"></div>
+
+
+          <!-- HORIZONTAL LINE -->
+
+          <div
+            *ngIf="c < cols - 1"
+
+            class="horizontal-line"
+
+            [class.player1-line]="
+              horizontalLines[r][c] === 'player1'
+            "
+
+            [class.player2-line]="
+              horizontalLines[r][c] === 'player2'
+            "
+
+            [style.--player1-color]="player1Color"
+            [style.--player2-color]="player2Color"
+
+            (click)="drawHorizontal(r, c)"
+          ></div>
+
+        </ng-container>
+
+      </div>
+
+
+      <!-- =====================================
+           VERTICAL LINES
+      ====================================== -->
+
+      <ng-container
+        *ngFor="
+          let row of [].constructor(rows - 1);
+          let r = index
+        "
+      >
+
+        <ng-container
+          *ngFor="
+            let col of [].constructor(cols);
+            let c = index
+          "
+        >
+
+          <div
+            class="vertical-line"
+
+            [style.left.px]="c * 60 + 4"
+
+            [style.top.px]="r * 60 + 38"
+
+            [class.player1-line]="
+              verticalLines[r][c] === 'player1'
+            "
+
+            [class.player2-line]="
+              verticalLines[r][c] === 'player2'
+            "
+
+            [style.--player1-color]="player1Color"
+            [style.--player2-color]="player2Color"
+
+            (click)="drawVertical(r, c)"
+          ></div>
+
+        </ng-container>
+
+      </ng-container>
+
+
+      <!-- =====================================
+           81 BOXES
+      ====================================== -->
+
+      <ng-container
+        *ngFor="
+          let row of [].constructor(rows - 1);
+          let r = index
+        "
+      >
+
+        <ng-container
+          *ngFor="
+            let col of [].constructor(cols - 1);
+            let c = index
+          "
+        >
+
+          <div
+            class="box"
+
+            [style.left.px]="c * 60 + 16"
+
+            [style.top.px]="r * 60 + 37"
+
+            [class.player1-box]="
+              getBoxOwner(r, c) === 'player1'
+            "
+
+            [class.player2-box]="
+              getBoxOwner(r, c) === 'player2'
+            "
+
+            [style.--player1-color]="player1Color"
+            [style.--player2-color]="player2Color"
+          >
+
+            <span
+              *ngIf="
+                getBoxOwner(r, c) === 'player1'
+              "
+            >
+              {{ player1Name }}
+            </span>
+
+
+            <span
+              *ngIf="
+                getBoxOwner(r, c) === 'player2'
+              "
+            >
+              {{ player2Name }}
+            </span>
+
+          </div>
+
+        </ng-container>
+
+      </ng-container>
+
+    </div>
+
+
+    <!-- =====================================
+         RESULT
+    ====================================== -->
+
+   <!-- =====================================
+     CONGRATULATIONS POPUP
+===================================== -->
+
+<div
+  class="congratulations-overlay"
+  *ngIf="gameOver"
+>
+  <div class="congratulations-popup">
+
+    <div class="trophy">
+      🏆
+    </div>
+
+    <h2>
+      🎉 Congratulations!
+    </h2>
+
+    <h3>
+      {{ getWinner() }}
+    </h3>
+
+    <p class="winner-message">
+  {{ getWinnerMessage() }}
+</p>
+    <div class="final-score">
+
+      <div
+        class="final-player"
+        [style.border-color]="player1Color"
+      >
+        <span
+          class="score-color"
+          [style.background]="player1Color"
+        ></span>
+
+        <strong>
+          {{ player1Name }}
+        </strong>
+
+        <span>
+          {{ player1Score }}
+        </span>
+      </div>
+
+
+      <div class="vs">
+        VS
+      </div>
+
+
+      <div
+        class="final-player"
+        [style.border-color]="player2Color"
+      >
+        <span
+          class="score-color"
+          [style.background]="player2Color"
+        ></span>
+
+        <strong>
+          {{ player2Name }}
+        </strong>
+
+        <span>
+          {{ player2Score }}
+        </span>
+      </div>
+
+
+
+    </div>
+
+
+    <button
+      class="play-again-button"
+      (click)="newGame()"
+    >
+      🎮 Play Again
+    </button>
+
+  </div>
+</div>
+
+
+    <button
+      *ngIf="!gameOver"
+      class="restart-button"
+      (click)="restartGame()"
+    >
+      Restart Game
+    </button>
+
+  </div>
+
+</div>

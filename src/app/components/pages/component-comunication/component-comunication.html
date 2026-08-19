@@ -1,1 +1,3 @@
 <p>component-comunication works!</p>
+<app-child [parentToChild]="parentChild" (msgEvent)="reciveMsg($event)"></app-child>
+{{message}}

@@ -1,0 +1,717 @@
+* {
+  box-sizing: border-box;
+}
+
+.game-container {
+  min-height: 100vh;
+  padding: 30px;
+  background: #f4f6f8;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+
+/* =====================================
+   SETUP
+===================================== */
+
+.setup-screen {
+  min-height: 90vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.setup-screen h1 {
+  margin-bottom: 5px;
+}
+
+.setup-screen > p {
+  margin-bottom: 25px;
+  color: #666;
+}
+
+
+.setup-container {
+  display: flex;
+  gap: 30px;
+}
+
+
+.setup-card {
+  width: 280px;
+
+  padding: 25px;
+
+  background: white;
+
+  border-radius: 15px;
+
+  box-shadow:
+    0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+
+.setup-card h2 {
+  margin-top: 0;
+}
+
+
+.setup-card label {
+  display: block;
+
+  text-align: left;
+
+  margin-top: 15px;
+  margin-bottom: 6px;
+
+  font-weight: 600;
+}
+
+
+.setup-card input[type="text"] {
+  width: 100%;
+
+  padding: 11px;
+
+  border: 1px solid #ccc;
+
+  border-radius: 7px;
+
+  outline: none;
+}
+
+
+.setup-card input[type="color"] {
+  width: 60px;
+  height: 40px;
+
+  cursor: pointer;
+
+  border: none;
+}
+
+
+.color-preview {
+  width: 100%;
+  height: 8px;
+
+  margin-top: 12px;
+
+  border-radius: 10px;
+}
+
+
+.start-button {
+  margin-top: 30px;
+
+  padding: 13px 35px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: #222;
+
+  color: white;
+
+  font-size: 16px;
+
+  cursor: pointer;
+}
+
+
+/* =====================================
+   PLAYERS
+===================================== */
+
+.players {
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 25px;
+
+  margin-bottom: 30px;
+}
+
+
+.player-card {
+  width: 160px;
+
+  padding: 12px;
+
+  background: white;
+
+  border: 3px solid;
+
+  border-radius: 12px;
+
+  font-size: 16px;
+
+  transition: 0.2s;
+}
+
+
+.player-card.active {
+  transform: scale(1.08);
+
+  box-shadow:
+    0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+
+.player-card strong {
+  display: block;
+
+  margin-top: 5px;
+
+  font-size: 28px;
+}
+
+
+.player-dot {
+  width: 12px;
+  height: 12px;
+
+  margin: 0 auto 6px;
+
+  border-radius: 50%;
+}
+
+
+.turn {
+  min-width: 150px;
+
+  font-weight: bold;
+}
+
+
+/* =====================================
+   BOARD
+===================================== */
+
+.board {
+
+  /*
+    10 dots
+    9 spaces × 60px
+    + 16px final dot
+  */
+
+  width: 556px;
+  height: 556px;
+
+  position: relative;
+
+  margin: 0 auto;
+
+  background: white;
+}
+
+
+/* =====================================
+   ROW
+===================================== */
+
+.board-row {
+
+  width: 556px;
+  height: 60px;
+
+  display: flex;
+
+  align-items: center;
+}
+
+
+/* =====================================
+   DOT
+===================================== */
+
+.dot {
+
+  width: 16px;
+  height: 16px;
+
+  min-width: 16px;
+
+  background: #222;
+
+  border-radius: 50%;
+
+  position: relative;
+
+  z-index: 30;
+}
+
+
+/* =====================================
+   HORIZONTAL LINE
+===================================== */
+
+.horizontal-line {
+
+  width: 44px;
+  height: 8px;
+
+  flex-shrink: 0;
+
+  background: #d7d7d7;
+
+  border-radius: 5px;
+
+  cursor: pointer;
+
+  position: relative;
+
+  z-index: 20;
+}
+
+
+.horizontal-line:hover {
+  background: #999;
+}
+
+
+.horizontal-line.player1-line {
+  background: var(--player1-color) !important;
+}
+
+
+.horizontal-line.player2-line {
+  background: var(--player2-color) !important;
+}
+
+
+/* =====================================
+   VERTICAL LINE
+===================================== */
+
+.vertical-line {
+
+  position: absolute;
+
+  width: 8px;
+  height: 44px;
+
+  background: #d7d7d7;
+
+  border-radius: 5px;
+
+  cursor: pointer;
+
+  z-index: 20;
+}
+
+
+.vertical-line:hover {
+  background: #999;
+}
+
+
+.vertical-line.player1-line {
+  background: var(--player1-color) !important;
+}
+
+
+.vertical-line.player2-line {
+  background: var(--player2-color) !important;
+}
+
+
+/* =====================================
+   BOX
+===================================== */
+
+.box {
+
+  position: absolute;
+
+  /*
+    This is the empty space between
+    4 dots.
+
+    Dot = 16px
+    Cell = 60px
+
+    Box = 44px × 44px
+  */
+
+  width: 44px;
+  height: 44px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 3px;
+
+  font-size: 10px;
+
+  font-weight: bold;
+
+  border-radius: 4px;
+
+  z-index: 10;
+
+  pointer-events: none;
+
+  overflow: hidden;
+
+  background: transparent;
+}
+
+
+/* =====================================
+   PLAYER 1 BOX
+===================================== */
+
+.box.player1-box {
+
+  background: var(--player1-color);
+
+  color: white;
+}
+
+
+/* =====================================
+   PLAYER 2 BOX
+===================================== */
+
+.box.player2-box {
+
+  background: var(--player2-color);
+
+  color: white;
+}
+
+
+/* =====================================
+   RESULT
+===================================== */
+
+.result {
+
+  margin-top: 30px;
+
+  padding: 20px;
+
+  background: white;
+
+  border-radius: 12px;
+
+  display: inline-block;
+
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =====================================
+   BUTTON
+===================================== */
+
+.restart-button {
+
+  margin-top: 52px;
+
+  padding: 12px 25px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: #222;
+
+  color: white;
+
+  font-size: 15px;
+
+  cursor: pointer;
+}
+
+
+.restart-button:hover {
+  background: #444;
+}
+
+
+/* =====================================
+   MOBILE
+===================================== */
+
+@media (max-width: 700px) {
+
+  .setup-container {
+    flex-direction: column;
+  }
+
+  .board {
+    transform: scale(0.7);
+
+    transform-origin: top center;
+
+    margin-bottom: -160px;
+  }
+
+  .players {
+    gap: 10px;
+  }
+
+  .player-card {
+    width: 130px;
+  }
+
+
+
+
+
+  .turn {
+    min-width: 90px;
+
+    font-size: 13px;
+  }
+}
+
+/* =====================================
+   CONGRATULATIONS OVERLAY
+===================================== */
+
+.congratulations-overlay {
+  position: fixed;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background: rgba(0, 0, 0, 0.65);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  z-index: 9999;
+
+  animation: fadeIn 0.3s ease;
+}
+
+
+/* =====================================
+   POPUP
+===================================== */
+
+.congratulations-popup {
+  width: 450px;
+
+  max-width: 90%;
+
+  padding: 35px 30px;
+
+  background: white;
+
+  border-radius: 22px;
+
+  text-align: center;
+
+  box-shadow:
+    0 15px 50px rgba(0, 0, 0, 0.3);
+
+  animation: popupIn 0.4s ease;
+}
+
+
+/* =====================================
+   TROPHY
+===================================== */
+
+.trophy {
+  font-size: 60px;
+
+  margin-bottom: 5px;
+
+  animation: trophyBounce 1s infinite;
+}
+
+
+.congratulations-popup h2 {
+  margin: 5px 0;
+
+  font-size: 30px;
+
+  color: #222;
+}
+
+
+.congratulations-popup h3 {
+  margin: 10px 0 25px;
+
+  font-size: 22px;
+
+  color: #555;
+}
+
+
+/* =====================================
+   SCORE
+===================================== */
+
+.final-score {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 12px;
+
+  margin-bottom: 25px;
+}
+
+
+.final-player {
+  min-width: 130px;
+
+  padding: 15px 10px;
+
+  border: 3px solid;
+
+  border-radius: 12px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 5px;
+
+  background: #fafafa;
+}
+
+
+.final-player strong {
+  font-size: 15px;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+
+.final-player span:last-child {
+  font-size: 28px;
+
+  font-weight: bold;
+}
+
+
+.score-color {
+  width: 12px;
+  height: 12px;
+
+  border-radius: 50%;
+
+  margin: 0 auto;
+}
+
+
+.vs {
+  font-weight: bold;
+
+  color: #777;
+
+  font-size: 14px;
+}
+
+
+/* =====================================
+   BUTTON
+===================================== */
+
+.play-again-button {
+  padding: 13px 30px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: #222;
+
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+
+.play-again-button:hover {
+  transform: scale(1.05);
+
+  background: #444;
+}
+
+
+/* =====================================
+   ANIMATIONS
+===================================== */
+
+@keyframes fadeIn {
+
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+
+}
+
+
+@keyframes popupIn {
+
+  from {
+    opacity: 0;
+
+    transform: scale(0.7);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: scale(1);
+  }
+
+}
+
+
+@keyframes trophyBounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+
+}
