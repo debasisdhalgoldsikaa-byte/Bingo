@@ -7,6 +7,7 @@ import { TicTacToe } from './components/game-zone/tic-tac-toe/tic-tac-toe';
 import { MainLayout } from './components/common/main-layout/main-layout';
 import { ConnectsDots } from './components/game-zone/connects-dots/connects-dots';
 import { Child } from './components/pages/child/child';
+import { Bingo } from './components/game-zone/bingo/bingo';
 
 export const routes: Routes = [
     {path: '', component: LogInComponent},
@@ -29,6 +30,9 @@ export const routes: Routes = [
                 path:'dotconnect', component:ConnectsDots
             },{
                 path:'communication', component:ComponentComunication
+            }
+            ,{
+                path:'bingo', component:Bingo
             }
         ]
     },

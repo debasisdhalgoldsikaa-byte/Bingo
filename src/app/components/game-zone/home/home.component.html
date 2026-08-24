@@ -1,10 +1,232 @@
+<div class="multiplauer">
+  <!-- ================================================= -->
+  <!-- MULTIPLAYER ROOM -->
+  <!-- ================================================= -->
+
+
+  <div class="multiplayer-panel">
+
+    <!-- Header -->
+    <div class="multiplayer-header">
+
+      <div class="multiplayer-icon">
+        🎮
+      </div>
+
+      <div>
+        <h3>Multiplayer Game</h3>
+        <p>Play Friendship with a friend</p>
+      </div>
+
+    </div>
+
+
+    <!-- Room Actions -->
+    <div class="room-actions">
+
+      <!-- CREATE ROOM -->
+      <div class="room-card create-card">
+
+        <div class="room-card-icon">
+          🏠
+        </div>
+
+        <div class="room-card-content">
+
+          <h4>Create a Room</h4>
+
+          <p>
+            Create a new game and invite your friend.
+          </p>
+
+          <button class="create-room-btn" (click)="createMultiplayerGame()" [disabled]="isGameCreated || isJoined">
+            🎮 Create Room
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- JOIN ROOM -->
+      <div class="room-card join-card">
+
+        <div class="room-card-icon">
+          🚀
+        </div>
+
+        <div class="room-card-content">
+
+          <h4>Join a Room</h4>
+
+          <p>
+            Enter your friend's game ID.
+          </p>
+
+          <div class="join-input-wrapper">
+
+            <input type="text" [(ngModel)]="joinGameId" placeholder="Enter Game ID" maxlength="6" />
+
+            <button class="join-room-btn" (click)="joinMultiplayerGame()" [disabled]="isGameCreated || isJoined">
+              Join
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- GAME ID -->
+    <div class="game-id-card" *ngIf="gameId">
+
+      <div class="game-id-icon">
+        🔑
+      </div>
+
+      <div class="game-id-content">
+
+        <span>
+          Your Game ID
+        </span>
+
+        <strong>
+          {{ gameId }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <!-- WAITING -->
+    <div class="waiting-message" *ngIf="waitingForPlayer">
+
+      <span class="waiting-icon">
+        ⏳
+      </span>
+
+      <div>
+        <strong>Waiting for Player 2</strong>
+
+        <small>
+          Share your Game ID with your friend
+        </small>
+      </div>
+
+    </div>
+
+
+    <!-- PLAYER ROLE -->
+    <div class="player-role" *ngIf="gameId">
+
+      <span>
+        👤 You are
+      </span>
+
+      <strong>
+        {{ playerRole === 'player1' ? 'Player 1' : 'Player 2' }}
+      </strong>
+
+    </div>
+
+  </div>
+
+
+  <!-- ================================================= -->
+  <!-- PLAYER ACTION -->
+  <!-- ================================================= -->
+
+  <!-- <div
+  class="action-message"
+  *ngIf="lastActionMessage"
+>
+
+  {{ lastActionMessage }}
+
+</div> -->
+
+
+  <!-- ================================================= -->
+  <!-- OTHER PLAYER ACTION -->
+  <!-- ================================================= -->
+
+  <div class="other-player-message" *ngIf="getOtherPlayerLatestNumber() !== null">
+
+    <ng-container *ngIf="playerRole === 'player1'">
+
+      Player 2 chose
+
+      <strong>
+        {{ getOtherPlayerLatestNumber() }}
+      </strong>
+
+    </ng-container>
+
+
+    <ng-container *ngIf="playerRole === 'player2'">
+
+      Player 1 chose
+
+      <strong>
+        {{ getOtherPlayerLatestNumber() }}
+      </strong>
+
+    </ng-container>
+
+  </div>
+</div>
 <div class="game-container">
 
   <h1>Friendship Game</h1>
+  <!-- ================================================= -->
+  <!-- PLAYER ACTION -->
+  <!-- ================================================= -->
 
+  <div class="action-message" *ngIf="lastActionMessage">
+    {{ lastActionMessage }}
+  </div>
+
+
+  <!-- ================================================= -->
+  <!-- OTHER PLAYER ACTION -->
+  <!-- ================================================= -->
+
+  <!-- <div
+  class="other-player-message"
+  *ngIf="getOtherPlayerLatestNumber() !== null"
+>
+
+  <ng-container
+    *ngIf="playerRole === 'player1'"
+  >
+
+    Player 2 chose
+    <strong>
+      {{ getOtherPlayerLatestNumber() }}
+    </strong>
+
+  </ng-container>
+
+
+  <ng-container
+    *ngIf="playerRole === 'player2'"
+  >
+
+    Player 1 chose
+    <strong>
+      {{ getOtherPlayerLatestNumber() }}
+    </strong>
+
+  </ng-container>
+
+</div> -->
 
   <!-- SEARCH / CONTROLS -->
-
+  <!-- 
   <div class="controls">
 
     <input
@@ -40,7 +262,7 @@
 
     </button>
 
-  </div>
+  </div> -->
 
 
   <!-- MAIN LAYOUT -->
@@ -53,58 +275,39 @@
     <!-- ========================= -->
 
     <div class="player-panel">
-<div class="player-icon-wrapper">
+      <div class="player-icon-wrapper">
 
-  <!-- Current Avatar -->
-  <div
-    class="player-icon"
-    (click)="openAvatarPicker()"
-  >
-    {{ playerAvatar }}
-  </div>
+        <!-- Current Avatar -->
+        <div class="player-icon" (click)="openAvatarPicker()">
+          {{ playerAvatar }}
+        </div>
 
-  <!-- Avatar Picker -->
-  <div
-    class="avatar-picker"
-    *ngIf="showAvatarPicker"
-  >
+        <!-- Avatar Picker -->
+        <div class="avatar-picker" *ngIf="showAvatarPicker">
 
-    <div class="avatar-title">
-      Choose Avatar
-    </div>
+          <div class="avatar-title">
+            Choose Avatar
+          </div>
 
-    <div class="avatar-options">
+          <div class="avatar-options">
 
-      <button
-        *ngFor="let emoji of avatarEmojis"
-        type="button"
-        class="avatar-option"
-        (click)="selectAvatar(emoji)"
-      >
-        {{ emoji }}
-      </button>
+            <button *ngFor="let emoji of avatarEmojis" type="button" class="avatar-option"
+              (click)="selectAvatar(emoji)">
+              {{ emoji }}
+            </button>
 
-    </div>
+          </div>
 
-    <!-- Upload Image -->
-    <label
-      for="playerImageInput"
-      class="upload-avatar"
-    >
-      📷 Upload Photo
-    </label>
+          <!-- Upload Image -->
+          <label for="playerImageInput" class="upload-avatar">
+            📷 Upload Photo
+          </label>
 
-    <input
-      id="playerImageInput"
-      type="file"
-      accept="image/*"
-      hidden
-      (change)="onPlayerImageSelected($event)"
-    />
+          <input id="playerImageInput" type="file" accept="image/*" hidden (change)="onPlayerImageSelected($event)" />
 
-  </div>
+        </div>
 
-</div>
+      </div>
 
 
       <h2>
@@ -114,20 +317,12 @@
 
       <!-- NAME INPUT -->
 
-      <div
-        class="name-section"
-        *ngIf="showNameInput">
+      <div class="name-section" *ngIf="showNameInput">
 
-        <input
-          type="text"
-          [(ngModel)]="playerName"
-          placeholder="Enter your name"
-          maxlength="30"
-          (keyup.enter)="savePlayerName()"
-        />
+        <input type="text" [(ngModel)]="playerName" placeholder="Enter your name" maxlength="30"
+          (keyup.enter)="savePlayerName()" />
 
-        <button
-          (click)="savePlayerName()">
+        <button (click)="savePlayerName()">
 
           Save
 
@@ -138,17 +333,13 @@
 
       <!-- SAVED NAME -->
 
-      <div
-        class="saved-name"
-        *ngIf="!showNameInput">
+      <div class="saved-name" *ngIf="!showNameInput">
 
         <div class="player-name">
           {{ playerName }}
         </div>
 
-        <button
-          class="change-name"
-          (click)="changePlayerName()">
+        <button class="change-name" (click)="changePlayerName()">
 
           Change Name
 
@@ -237,74 +428,55 @@
 
     <div class="board-section">
 
-   <div class="game-board">
+      <div class="game-board">
 
-  <!-- 100 Numbers -->
-  <div
-    *ngFor="let number of numbers; let i = index"
-    class="cell"
-    [class.marked]="isMarked(number)"
-    (click)="toggleNumber(number)"
-  >
+        <!-- 100 Numbers -->
+        <div *ngFor="let number of numbers; let i = index" class="cell" [class.marked]="isMarked(number)"
+          [class.my-latest]="isMyLatestNumber(number)" [class.friend-latest]="isFriendLatestNumber(number)"
+          (click)="toggleNumber(number)">
 
-    <span class="number">
-      {{ number }}
-    </span>
+          <span class="number">
+            {{ number }}
+          </span>
 
-    <!-- X for selected number -->
-    <div
-      class="number-cross"
-      *ngIf="isMarked(number)"
-    >
-      <span class="cross-line cross-left"></span>
-      <span class="cross-line cross-right"></span>
-    </div>
+          <!-- X for selected number -->
+          <div class="number-cross" *ngIf="isMarked(number)">
+            <span class="cross-line cross-left"></span>
+            <span class="cross-line cross-right"></span>
+          </div>
 
-  </div>
+        </div>
 
 
-  <!-- ========================= -->
-  <!-- FULL HORIZONTAL STRIKES -->
-  <!-- ========================= -->
+        <!-- ========================= -->
+        <!-- FULL HORIZONTAL STRIKES -->
+        <!-- ========================= -->
 
-  <div
-    *ngFor="let row of completedRows"
-    class="completed-horizontal-line"
-    [style.top.%]="row * 10 + 5"
-  ></div>
+        <div *ngFor="let row of completedRows" class="completed-horizontal-line" [style.top.%]="row * 10 + 5"></div>
 
 
-  <!-- ========================= -->
-  <!-- FULL VERTICAL STRIKES -->
-  <!-- ========================= -->
+        <!-- ========================= -->
+        <!-- FULL VERTICAL STRIKES -->
+        <!-- ========================= -->
 
-  <div
-    *ngFor="let column of completedColumns"
-    class="completed-vertical-line"
-    [style.left.%]="column * 10 + 5"
-  ></div>
+        <div *ngFor="let column of completedColumns" class="completed-vertical-line" [style.left.%]="column * 10 + 5">
+        </div>
 
 
-  <!-- ========================= -->
-  <!-- DIAGONAL 1 -->
-  <!-- ========================= -->
+        <!-- ========================= -->
+        <!-- DIAGONAL 1 -->
+        <!-- ========================= -->
 
-  <div
-    *ngIf="diagonal1Completed"
-    class="completed-diagonal-line diagonal-1"
-  ></div>
+        <div *ngIf="diagonal1Completed" class="completed-diagonal-line diagonal-1"></div>
 
 
-  <!-- ========================= -->
-  <!-- DIAGONAL 2 -->
-  <!-- ========================= -->
+        <!-- ========================= -->
+        <!-- DIAGONAL 2 -->
+        <!-- ========================= -->
 
-  <div
-    *ngIf="diagonal2Completed"
-    class="completed-diagonal-line diagonal-2"
-  ></div>
+        <div *ngIf="diagonal2Completed" class="completed-diagonal-line diagonal-2"></div>
 
-</div>
+      </div>
 
     </div>
 
@@ -313,58 +485,46 @@
     <!-- FRIENDSHIP -->
     <!-- ========================= -->
 
-      <div class="friendship-panel">
+    <div class="friendship-panel">
 
-        <div class="friendship-letters">
+      <div class="friendship-letters">
 
-          <div
-            *ngFor="
+        <div *ngFor="
               let letter of friendshipWord.split('');
               let i = index
-            "
-
-            class="friendship-letter"
-
-            [class.crossed]="
+            " class="friendship-letter" [class.crossed]="
               isLetterCrossed(i)
-            "
-          >
+            ">
 
-            {{ letter }}
+          {{ letter }}
 
-            <!-- Single cross -->
+          <!-- Single cross -->
 
-            <span
-              class="single-cross"
-              *ngIf="
+          <span class="single-cross" *ngIf="
                 isLetterCrossed(i)
-              "
-            >
-              ✕
-            </span>
-
-          </div>
-
-        </div>
-
-
-        <div class="line-count">
-
-          {{ completedLineCount }} / 10
+              ">
+            ✕
+          </span>
 
         </div>
 
       </div>
+
+
+      <div class="line-count">
+
+        {{ completedLineCount }} / 10
+
+      </div>
+
+    </div>
 
   </div>
 
 
   <!-- CONGRATULATION SCREEN -->
 
-  <div
-    class="congratulation-overlay"
-    *ngIf="showCongratulations"
-  >
+  <div class="congratulation-overlay" *ngIf="showCongratulations">
 
     <div class="congratulation-box">
 
@@ -389,9 +549,7 @@
         You completed all 10 lines!
       </p>
 
-      <button
-        class="new-game-button"
-        (click)="resetGame()">
+      <button class="new-game-button" (click)="resetGame()">
 
         🎮 Play Again
 
